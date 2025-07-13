@@ -2,11 +2,7 @@
 using AutoMapper;
 using NET9.Application.DTOs;
 using NET9.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NET9.Domain.Entities;
 
 namespace NET9.Application.Services
 {
@@ -19,6 +15,12 @@ namespace NET9.Application.Services
         {
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        {
+            var products = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
         public async Task<ProductDto?> GetProductAsync(int id)
@@ -37,6 +39,26 @@ namespace NET9.Application.Services
 
             return dto;
         }
+
+        public async Task<ProductDto> CreateProductAsync(ProductDto dto)
+        {
+            var entity = _mapper.Map<ProductEntity>(dto);
+            var result = await _repository.AddAsync(entity);
+            return _mapper.Map<ProductDto>(result);
+        }
+
+        public async Task<bool> UpdateProductAsync(int id, ProductDto dto)
+        {
+            var entity = _mapper.Map<ProductEntity>(dto);
+            entity.Id = id;
+            return await _repository.UpdateAsync(entity);
+        }
+
+        public async Task<bool> DeleteProductAsync(int id)
+        {
+            return await _repository.DeleteAsync(id);
+        }
+
 
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using NET9.Application.Interfaces;
 using NET9.Application.Mapping;
 using NET9.Application.Services;
-using NET9.Infrastructure.Data;
 using NET9.Infrastructure.Repositories;
-using AutoMapper;
 using NET9.Infrastructure.Mapping;
+using NET9.Infrastructure.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

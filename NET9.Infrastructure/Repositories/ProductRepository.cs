@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using NET9.Application.DTOs;
 using NET9.Application.Interfaces;
 using NET9.Domain.Entities;
-using NET9.Infrastructure.Data;
+using NET9.Infrastructure.Data.Context;
 using NET9.Infrastructure.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NET9.Infrastructure.Repositories
 {
@@ -24,14 +18,53 @@ namespace NET9.Infrastructure.Repositories
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<ProductEntity>> GetAllAsync()
+        {
+            var efProducts = await _context.Products.AsNoTracking().ToListAsync();
+
+            return _mapper.Map<IEnumerable<ProductEntity>>(efProducts);
+        }
+
         public async Task<ProductEntity?> GetByIdAsync(int id)
         {
-            var efProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var efProduct = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
             if (efProduct == null) return null;
 
             return _mapper.Map<ProductEntity?>(efProduct);
         }
+        public async Task<ProductEntity> AddAsync(ProductEntity entity)
+        {
+            // Map ProductEntity → EFEntity
+            var efEntity = _mapper.Map<Product>(entity);
 
+            _context.Products.Add(efEntity);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<ProductEntity>(efEntity);
+        }
+
+        public async Task<bool> UpdateAsync(ProductEntity entity)
+        {
+            var efEntity = await _context.Products.FindAsync(entity.Id);
+            if (efEntity == null) return false;
+
+            // Map เฉพาะ field ที่อนุญาตให้แก้ไข (ถ้าไม่ใช้ ReverseMap โดยตรง)
+            efEntity.Name = entity.Name;
+            efEntity.Price = entity.Price;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var efEntity = await _context.Products.FindAsync(id);
+            if (efEntity == null) return false;
+
+            _context.Products.Remove(efEntity);
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
 
     }

@@ -1,7 +1,30 @@
 ﻿@NET9.API_HostAddress = http://localhost:5174
+@productId = 1
 
-GET {{NET9.API_HostAddress}}/api/product/1
-
+### 🔍 Get Product by Id
+GET {{NET9.API_HostAddress}}/api/product/{{productId}}
 Accept: application/json
 
-###
+### 📋 Get All Products
+GET {{NET9.API_HostAddress}}/api/product
+Accept: application/json
+
+### ➕ Create Product
+POST {{NET9.API_HostAddress}}/api/product
+Content-Type: application/json
+{
+  "name": "ตะกร้าใส่ผ้า",
+  "price": 350
+}
+
+### ✏️ Update Product
+PUT {{NET9.API_HostAddress}}/api/product/{{productId}}
+Content-Type: application/json
+{
+  "name": "Laptop ABC",
+  "price": 19000
+}
+
+### 🗑️ Delete Product
+DELETE {{NET9.API_HostAddress}}/api/product/{{productId}}
+Accept: application/json
