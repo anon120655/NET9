@@ -1,0 +1,7 @@
+﻿@NET9.API_HostAddress = http://localhost:5174
+
+GET {{NET9.API_HostAddress}}/api/product/1
+
+Accept: application/json
+
+###
