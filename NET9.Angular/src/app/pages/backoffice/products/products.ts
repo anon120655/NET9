@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService, Product } from '../../services/product.service';
+import { Title } from '@angular/platform-browser';
+import { ProductService, Product } from '../../../services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -10,9 +11,11 @@ import { ProductService, Product } from '../../services/product.service';
 export class Products implements OnInit {
   products: Product[] = [];
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private titleService: Title) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle('สินค้าทั้งหมด');
+
     this.productService.getProducts().subscribe({
       next: (data) => {
         this.products = data;

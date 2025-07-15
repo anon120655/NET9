@@ -16,7 +16,23 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  // ✅ Get All Products
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
+  }
+
+  // ✅ Get Single Product
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  }
+
+  // ✅ Create Product (ไม่ต้องใส่ id/discount/finalPrice)
+  createProduct(data: Partial<Product>): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, data);
+  }
+
+  // ✅ Update Product
+  updateProduct(id: number, data: Partial<Product>): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, data);
   }
 }

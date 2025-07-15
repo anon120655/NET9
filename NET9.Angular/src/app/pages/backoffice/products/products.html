@@ -1,4 +1,10 @@
-<h2 class="text-2xl font-bold mb-4">สินค้าทั้งหมด</h2>
+<div class="flex items-center justify-between mb-4">
+  <h2 class="text-2xl font-bold">สินค้าทั้งหมด</h2>
+  <a routerLink="/backoffice/products/create"
+     class="	bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 transition">
+    + สร้างสินค้า
+  </a>
+</div>
 
 <div class="overflow-x-auto bg-white rounded shadow">
   <table class="min-w-full divide-y divide-gray-200 text-sm">
@@ -9,19 +15,22 @@
         <th class="px-4 py-2 text-right hidden sm:table-cell">ราคา</th>
         <th class="px-4 py-2 text-right hidden lg:table-cell">ส่วนลด</th>
         <th class="px-4 py-2 text-right">ราคาสุทธิ</th>
+        <th class="px-4 py-2 text-center">จัดการ</th> <!-- ✅ เพิ่ม -->
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of products" class="hover:bg-gray-50">
         <td class="px-4 py-2">{{ p.id }}</td>
         <td class="px-4 py-2">{{ p.name }}</td>
-        <td class="px-4 py-2 text-right hidden sm:table-cell">
-          {{ p.price | number }}
-        </td>
-        <td class="px-4 py-2 text-right hidden lg:table-cell">
-          {{ p.discount | number }}
-        </td>
+        <td class="px-4 py-2 text-right hidden sm:table-cell">{{ p.price | number }}</td>
+        <td class="px-4 py-2 text-right hidden lg:table-cell">{{ p.discount | number }}</td>
         <td class="px-4 py-2 text-right font-semibold">{{ p.finalPrice | number }}</td>
+        <td class="px-4 py-2 text-center">
+          <a [routerLink]="['/backoffice/products/update', p.id]"
+             class="text-blue-600 hover:underline">
+            แก้ไข
+          </a>
+        </td>
       </tr>
     </tbody>
   </table>
