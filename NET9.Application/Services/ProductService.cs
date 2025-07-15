@@ -20,7 +20,24 @@ namespace NET9.Application.Services
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
             var products = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
+
+            var productDtos = new List<ProductDto>();
+
+            foreach (var product in products)
+            {
+                // เรียก Business Logic ที่อยู่ใน Entity
+                var discount = product.CalculateDiscount();
+                var finalPrice = product.GetFinalPrice();
+
+                // Mapping แล้วใส่ข้อมูลเพิ่ม
+                var dto = _mapper.Map<ProductDto>(product);
+                dto.Discount = discount;
+                dto.FinalPrice = finalPrice;
+
+                productDtos.Add(dto);
+            }
+
+            return productDtos;
         }
 
         public async Task<ProductDto?> GetProductAsync(int id)

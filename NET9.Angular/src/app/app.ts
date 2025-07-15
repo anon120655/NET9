@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,24 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('NET9.Angular ทดสอบ');
+  isSidebarOpen = window.innerWidth >= 1024; // Open on large screens (lg: 1024px), closed on smaller
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isSidebarOpen = window.innerWidth >= 1024; // Auto-open on large screens, auto-close on smaller
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen; // Toggle sidebar state
+  }
+
+  closeSidebar() {
+    if (window.innerWidth < 1024) { // Only close sidebar on smaller screens
+      this.isSidebarOpen = false;
+    }
+  }
+
+  clickSidebar() {
+      this.isSidebarOpen = true;    
+  }
 }

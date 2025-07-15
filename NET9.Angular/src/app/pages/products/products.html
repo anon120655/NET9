@@ -1,22 +1,28 @@
-<h1>สินค้าทั้งหมด</h1>
+<h2 class="text-2xl font-bold mb-4">สินค้าทั้งหมด</h2>
 
-<table border="1" cellpadding="8">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>ชื่อสินค้า</th>
-      <th>ราคาปกติ</th>
-      <th>ส่วนลด</th>
-      <th>ราคาสุทธิ</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let p of products">
-      <td>{{ p.id }}</td>
-      <td>{{ p.name }}</td>
-      <td>{{ p.price | number }}</td>
-      <td>{{ p.discount | number }}</td>
-      <td>{{ p.finalPrice | number }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="overflow-x-auto bg-white rounded shadow">
+  <table class="min-w-full divide-y divide-gray-200 text-sm">
+    <thead class="bg-purple-600 text-white">
+      <tr>
+        <th class="px-4 py-2 text-left">#</th>
+        <th class="px-4 py-2 text-left">ชื่อสินค้า</th>
+        <th class="px-4 py-2 text-right hidden sm:table-cell">ราคา</th>
+        <th class="px-4 py-2 text-right hidden lg:table-cell">ส่วนลด</th>
+        <th class="px-4 py-2 text-right">ราคาสุทธิ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products" class="hover:bg-gray-50">
+        <td class="px-4 py-2">{{ p.id }}</td>
+        <td class="px-4 py-2">{{ p.name }}</td>
+        <td class="px-4 py-2 text-right hidden sm:table-cell">
+          {{ p.price | number }}
+        </td>
+        <td class="px-4 py-2 text-right hidden lg:table-cell">
+          {{ p.discount | number }}
+        </td>
+        <td class="px-4 py-2 text-right font-semibold">{{ p.finalPrice | number }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
