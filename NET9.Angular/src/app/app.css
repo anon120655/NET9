@@ -1,0 +1,10 @@
+.logo-link {
+  display: block;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.logo-img {
+  max-width: 120px;
+  height: auto;
+}

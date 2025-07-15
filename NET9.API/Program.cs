@@ -2,9 +2,10 @@
 using NET9.Application.Interfaces;
 using NET9.Application.Mapping;
 using NET9.Application.Services;
-using NET9.Infrastructure.Repositories;
-using NET9.Infrastructure.Mapping;
 using NET9.Infrastructure.Data.Context;
+using NET9.Infrastructure.Mapping;
+using NET9.Infrastructure.Repositories;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,15 @@ var AutoMapperAssemblies = new[]
 
 builder.Services.AddAutoMapper(AutoMapperAssemblies);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:60472") // หรือพอร์ตของ Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -38,7 +48,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
+
+app.UseCors("AllowAngular");
 
 app.UseHttpsRedirection();
 

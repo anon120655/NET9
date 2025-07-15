@@ -1,0 +1,22 @@
+<h1>สินค้าทั้งหมด</h1>
+
+<table border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>ชื่อสินค้า</th>
+      <th>ราคาปกติ</th>
+      <th>ส่วนลด</th>
+      <th>ราคาสุทธิ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of products">
+      <td>{{ p.id }}</td>
+      <td>{{ p.name }}</td>
+      <td>{{ p.price | number }}</td>
+      <td>{{ p.discount | number }}</td>
+      <td>{{ p.finalPrice | number }}</td>
+    </tr>
+  </tbody>
+</table>

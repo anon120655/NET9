@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET9.API", "NET9.API\NET9.API.csproj", "{0DF9BCE3-1910-41C7-AA8A-76B26AB0FCF7}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET9.UnitTests", "NET9.UnitTests\NET9.UnitTests.csproj", "{AAE0D3E2-A8AB-4D0D-A1E4-F99EA5005CB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NET9.UI", "NET9.UI\NET9.UI.csproj", "{E0D44A76-7DF0-43B3-A006-A88D82F7FB81}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "NET9.Angular", "NET9.Angular\NET9.Angular.esproj", "{FFD40C39-D67F-D8EB-2424-37153CEB341D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,12 @@ Global
 		{E0D44A76-7DF0-43B3-A006-A88D82F7FB81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0D44A76-7DF0-43B3-A006-A88D82F7FB81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0D44A76-7DF0-43B3-A006-A88D82F7FB81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD40C39-D67F-D8EB-2424-37153CEB341D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
