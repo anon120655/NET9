@@ -15,6 +15,7 @@ import { BackofficeLayout } from './layouts/backoffice-layout/backoffice-layout'
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 import { About } from './pages/front/about/about';
 import { ProductForm } from './pages/backoffice/products/product-form/product-form';
+import { SharedModule } from './shared/shared-module';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ProductForm } from './pages/backoffice/products/product-form/product-fo
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    SharedModule
   ],
   providers: [],
   bootstrap: [App]

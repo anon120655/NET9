@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
-using NET9.Application.DTOs;
+using NET9.Application.DTOs.Products;
+using NET9.Application.DTOs.Shared;
 using NET9.Application.Interfaces;
 using NET9.Domain.Entities;
 
@@ -15,6 +16,28 @@ namespace NET9.Application.Services
         {
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<PaginationView<IEnumerable<ProductDto>>> GetProductsPagedAsync(ProductQueryModel q)
+        {
+            var (entities, total) = await _repository.GetPagedAsync(q);
+
+            var dtos = entities.Select(e =>
+            {
+                var dto = _mapper.Map<ProductDto>(e);
+                dto.Discount = e.CalculateDiscount();
+                dto.FinalPrice = e.GetFinalPrice();
+                return dto;
+            }).ToList();
+
+            var pager = new Pager(total, q.Page, q.PageSize, q);
+            var result = new PaginationView<IEnumerable<ProductDto>>
+            {
+                Items = dtos,
+                Pager = pager
+            };
+
+            return result;
         }
 
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
@@ -75,7 +98,6 @@ namespace NET9.Application.Services
         {
             return await _repository.DeleteAsync(id);
         }
-
 
     }
 }

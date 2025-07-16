@@ -15,7 +15,7 @@
         <th class="px-4 py-2 text-right hidden sm:table-cell">ราคา</th>
         <th class="px-4 py-2 text-right hidden lg:table-cell">ส่วนลด</th>
         <th class="px-4 py-2 text-right">ราคาสุทธิ</th>
-        <th class="px-4 py-2 text-center">จัดการ</th> <!-- ✅ เพิ่ม -->
+        <th class="px-4 py-2 text-center">จัดการ</th>
       </tr>
     </thead>
     <tbody>
@@ -25,13 +25,53 @@
         <td class="px-4 py-2 text-right hidden sm:table-cell">{{ p.price | number }}</td>
         <td class="px-4 py-2 text-right hidden lg:table-cell">{{ p.discount | number }}</td>
         <td class="px-4 py-2 text-right font-semibold">{{ p.finalPrice | number }}</td>
-        <td class="px-4 py-2 text-center">
+        <td class="px-4 py-2 text-center space-x-2">
           <a [routerLink]="['/backoffice/products/update', p.id]"
              class="text-blue-600 hover:underline">
             แก้ไข
           </a>
+          <button (click)="onDelete(p.id)"
+                  class="text-red-600 hover:text-red-800"
+                  title="ลบสินค้า">
+            ลบ
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<!-- Pagination -->
+<nav class="mt-4 flex justify-center">
+  <ul class="inline-flex items-center space-x-1 text-sm">
+    <li>
+      <button (click)="loadPage(pager.currentPage - 1)"
+              [disabled]="pager.currentPage === 1"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        ก่อนหน้า
+      </button>
+    </li>
+
+     หมายเลขหน้า 
+    <li *ngFor="let pg of pages">
+      <button (click)="loadPage(pg)"
+              [class.font-bold]="pg === pager.currentPage"
+              class="px-3 py-1 rounded hover:bg-gray-200">
+        {{ pg }}
+      </button>
+    </li>
+
+    <li>
+      <button (click)="loadPage(pager.currentPage + 1)"
+              [disabled]="pager.currentPage === pager.totalPages"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        ถัดไป
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- เรียก PaginationComponent -->
+<!--<app-pagination [pager]="pager"
+                (pageChange)="loadPage($event)">
+</app-pagination>-->

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NET9.Application.DTOs.Products;
 using NET9.Application.Interfaces;
 using NET9.Domain.Entities;
 using NET9.Infrastructure.Data.Context;
@@ -16,6 +17,29 @@ namespace NET9.Infrastructure.Repositories
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<(IEnumerable<ProductEntity>, int)> GetPagedAsync(ProductQueryModel q)
+        {
+            var query = _context.Products.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrEmpty(q.NameContains))
+                query = query.Where(p => p.Name!.Contains(q.NameContains));
+
+            if (q.MinPrice.HasValue)
+                query = query.Where(p => p.Price >= q.MinPrice);
+
+            if (q.MaxPrice.HasValue)
+                query = query.Where(p => p.Price <= q.MaxPrice);
+
+            var total = await query.CountAsync();
+
+            var items = await query
+                .Skip((q.Page - 1) * q.PageSize)
+                .Take(q.PageSize)
+                .ToListAsync();
+
+            return (_mapper.Map<IEnumerable<ProductEntity>>(items), total);
         }
 
         public async Task<IEnumerable<ProductEntity>> GetAllAsync()

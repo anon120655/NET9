@@ -1,0 +1,44 @@
+<nav class="mt-4 flex justify-center">
+  <ul class="inline-flex items-center space-x-1 text-sm">
+    <!-- หน้าแรก -->
+    <li>
+      <button (click)="toFirst()"
+              [disabled]="pager.currentPage===1"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        หน้าแรก
+      </button>
+    </li>
+    <!-- ก่อนหน้า -->
+    <li>
+      <button (click)="toPrevious()"
+              [disabled]="pager.currentPage===1"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        &laquo;
+      </button>
+    </li>
+    <!-- หมายเลขแต่ละหน้า -->
+    <li *ngFor="let pg of pages">
+      <button (click)="pageChange.emit(pg)"
+              [class.font-bold]="pg===pager.currentPage"
+              class="px-3 py-1 rounded hover:bg-gray-200">
+        {{ pg }}
+      </button>
+    </li>
+    <!-- ถัดไป -->
+    <li>
+      <button (click)="toNext()"
+              [disabled]="pager.currentPage===pager.totalPages"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        &raquo;
+      </button>
+    </li>
+    <!-- หน้าสุดท้าย -->
+    <li>
+      <button (click)="toLast()"
+              [disabled]="pager.currentPage===pager.totalPages"
+              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
+        หน้าสุดท้าย
+      </button>
+    </li>
+  </ul>
+</nav>

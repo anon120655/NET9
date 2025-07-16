@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NET9.Application.DTOs;
+using NET9.Application.DTOs.Products;
 using NET9.Application.Interfaces;
 
 namespace NET9.API.Controllers
@@ -13,6 +13,13 @@ namespace NET9.API.Controllers
         public ProductController(IProductService productService)
         {
             _productService = productService;
+        }
+
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetProductsPagedAsync([FromQuery] ProductQueryModel q)
+        {
+            var result = await _productService.GetProductsPagedAsync(q);
+            return Ok(result);
         }
 
         [HttpGet]
