@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ProductService, Product, Pager, PagedResponse } from '../../../services/product.service';
+import { ProductService, Product, Pager } from '../../../services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -10,35 +10,68 @@ import { ProductService, Product, Pager, PagedResponse } from '../../../services
 })
 export class Products implements OnInit {
   products: Product[] = [];
-  pager!: Pager;
-  pages: number[] = [];
-
-  // กำหนด default page size
+  pager: Pager | null = null;
+  currentPage = 1;
   pageSize = 10;
+  loading = false;
 
   constructor(private productService: ProductService, private titleService: Title) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('สินค้าทั้งหมด');
-
-    this.loadPage(1);
+    this.loadProducts();
   }
 
-  loadPage(page: number) {
-    this.productService.getPagedProducts(page, this.pageSize)
-      .subscribe({
-        next: (res: PagedResponse<Product>) => {
-          //console.log('API response:', res);           // ดูทั้ง object
-          //console.log('Items:', res.items);            // ดูเฉพาะ array items
-          this.products = res.items;
-          this.pager = res.pager;
-          // สร้าง array ของหมายเลขหน้า จาก startPage ถึง endPage
-          this.pages = Array
-            .from({ length: this.pager.endPage - this.pager.startPage + 1 })
-            .map((_, i) => this.pager.startPage + i);
-        },
-        error: err => console.error('โหลดสินค้าไม่สำเร็จ', err)
-      });
+  loadProducts(): void {
+    this.loading = true;
+
+    this.productService.getPagedProducts(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        this.products = response.items;
+        this.pager = response.pager;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('เกิดข้อผิดพลาดในการโหลดสินค้า', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  // เปลี่ยนหน้า
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= (this.pager?.totalPages || 1)) {
+      this.currentPage = page;
+      this.loadProducts();
+    }
+  }
+
+  // สร้าง array ของหมายเลขหน้าสำหรับแสดงใน pagination
+  getPageNumbers(): number[] {
+    if (!this.pager) return [];
+
+    const pages: number[] = [];
+    for (let i = this.pager.startPage; i <= this.pager.endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  // ตรวจสอบว่าสามารถไปหน้าก่อนหน้าได้หรือไม่
+  canGoPrevious(): boolean {
+    return this.pager ? this.pager.currentPage > 1 : false;
+  }
+
+  // ตรวจสอบว่าสามารถไปหน้าถัดไปได้หรือไม่
+  canGoNext(): boolean {
+    return this.pager ? this.pager.currentPage < this.pager.totalPages : false;
+  }
+
+  getDisplayRange(): string {
+    if (!this.pager) return '';
+    const start = ((this.pager.currentPage - 1) * this.pager.pageSize) + 1;
+    const end = Math.min(this.pager.currentPage * this.pager.pageSize, this.pager.totalItems);
+    return `แสดง ${start} - ${end} จาก ${this.pager.totalItems} รายการ`;
   }
 
   onDelete(id: number) {

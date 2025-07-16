@@ -15,7 +15,8 @@ import { BackofficeLayout } from './layouts/backoffice-layout/backoffice-layout'
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 import { About } from './pages/front/about/about';
 import { ProductForm } from './pages/backoffice/products/product-form/product-form';
-import { SharedModule } from './shared/shared-module';
+//import { SharedModule } from './shared/shared-module';
+
 
 @NgModule({
   declarations: [
@@ -32,16 +33,16 @@ import { SharedModule } from './shared/shared-module';
   imports: [
     BrowserModule,
     RouterModule,
-    HttpClientModule,
     FormsModule,
     AppRoutingModule,
+    HttpClientModule,
+    //SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    SharedModule
   ],
   providers: [],
   bootstrap: [App]

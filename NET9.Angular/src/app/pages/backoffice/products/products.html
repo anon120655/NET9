@@ -6,7 +6,13 @@
   </a>
 </div>
 
-<div class="overflow-x-auto bg-white rounded shadow">
+<!-- Loading State -->
+<div *ngIf="loading" class="text-center py-4">
+  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+  <p class="mt-2 text-gray-600">กำลังโหลดข้อมูล...</p>
+</div>
+
+<div *ngIf="!loading" class="overflow-x-auto bg-white rounded shadow">
   <table class="min-w-full divide-y divide-gray-200 text-sm">
     <thead class="bg-purple-600 text-white">
       <tr>
@@ -37,41 +43,60 @@
           </button>
         </td>
       </tr>
+      <!-- Empty State -->
+      <tr *ngIf="products.length === 0">
+        <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+          ไม่พบข้อมูลสินค้า
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>
 
 <!-- Pagination -->
-<nav class="mt-4 flex justify-center">
-  <ul class="inline-flex items-center space-x-1 text-sm">
-    <li>
-      <button (click)="loadPage(pager.currentPage - 1)"
-              [disabled]="pager.currentPage === 1"
-              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
-        ก่อนหน้า
-      </button>
-    </li>
+<div *ngIf="!loading && pager" class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+  <!-- Info -->
+  <div class="text-sm text-gray-600">
+    {{ getDisplayRange() }}
+  </div>
 
-     หมายเลขหน้า 
-    <li *ngFor="let pg of pages">
-      <button (click)="loadPage(pg)"
-              [class.font-bold]="pg === pager.currentPage"
-              class="px-3 py-1 rounded hover:bg-gray-200">
-        {{ pg }}
-      </button>
-    </li>
+  <!-- Pagination Controls -->
+  <div class="flex items-center gap-2">
+    <!-- First Page Button -->
+    <button (click)="onPageChange(1)"
+            [disabled]="pager.currentPage === 1"
+            class="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+      หน้าแรก
+    </button>
 
-    <li>
-      <button (click)="loadPage(pager.currentPage + 1)"
-              [disabled]="pager.currentPage === pager.totalPages"
-              class="px-3 py-1 rounded hover:bg-gray-200 disabled:opacity-50">
-        ถัดไป
-      </button>
-    </li>
-  </ul>
-</nav>
+    <!-- Previous Button -->
+    <button (click)="onPageChange(currentPage - 1)"
+            [disabled]="!canGoPrevious()"
+            class="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+      ก่อนหน้า
+    </button>
 
-<!-- เรียก PaginationComponent -->
-<!--<app-pagination [pager]="pager"
-                (pageChange)="loadPage($event)">
-</app-pagination>-->
+    <!-- Page Numbers -->
+    <button *ngFor="let page of getPageNumbers()"
+            (click)="onPageChange(page)"
+            [class]="page === pager.currentPage ?
+        'px-3 py-1 text-sm bg-purple-600 text-white rounded' :
+        'px-3 py-1 text-sm border rounded hover:bg-gray-50'">
+      {{ page }}
+    </button>
+
+    <!-- Next Button -->
+    <button (click)="onPageChange(currentPage + 1)"
+            [disabled]="!canGoNext()"
+            class="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+      ถัดไป
+    </button>
+
+    <!-- Last Page Button -->
+    <button (click)="onPageChange(pager.totalPages)"
+            [disabled]="pager.currentPage === pager.totalPages"
+            class="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+      หน้าสุดท้าย
+    </button>
+  </div>
+</div>
