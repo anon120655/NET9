@@ -80,21 +80,14 @@ export class Products implements OnInit {
   }
 
 
-  onDelete(id: number) {
+  onDelete(id: number, name: string) {
     Swal.fire({
       title: 'คุณแน่ใจหรือไม่?',
-      text: 'คุณต้องการลบสินค้านี้ใช่หรือไม่?',
+      text: `คุณต้องการลบ ${name}?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
       confirmButtonText: 'ลบเลย',
-      cancelButtonText: 'ยกเลิก',
-      customClass: {
-        confirmButton: 'swal2-confirm-btn',
-        cancelButton: 'swal2-cancel-btn'
-      },
-      buttonsStyling: false
+      cancelButtonText: 'ยกเลิก'
     }).then((result) => {
       if (result.isConfirmed) {
         this.productService.deleteProduct(id).subscribe({

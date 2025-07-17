@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-.swal2-confirm-btn {
+.swal2-confirm {
   background-color: #d33;
   color: white;
   padding: 8px 16px;
   border-radius: 4px;
-  margin-right: 20px;
+  margin-right: 8px; /* เว้นระยะ */
 }
 
-.swal2-cancel-btn {
+.swal2-cancel {
   background-color: #ccc;
   color: black;
   padding: 8px 16px;
