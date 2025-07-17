@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { delay } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { ProductService, Product, Pager } from '../../../services/product.service';
 
 @Component({
@@ -25,17 +27,20 @@ export class Products implements OnInit {
   loadProducts(): void {
     this.loading = true;
 
-    this.productService.getPagedProducts(this.currentPage, this.pageSize).subscribe({
-      next: (response) => {
-        this.products = response.items;
-        this.pager = response.pager;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('เกิดข้อผิดพลาดในการโหลดสินค้า', err);
-        this.loading = false;
-      }
-    });
+    this.productService
+      .getPagedProducts(this.currentPage, this.pageSize)
+      .pipe(delay(300)) // หน่วง 1000 ms = 1 วินาที
+      .subscribe({
+        next: (response) => {
+          this.products = response.items;
+          this.pager = response.pager;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('เกิดข้อผิดพลาดในการโหลดสินค้า', err);
+          this.loading = false;
+        }
+      });
   }
 
   // เปลี่ยนหน้า
@@ -74,17 +79,37 @@ export class Products implements OnInit {
     return `แสดง ${start} - ${end} จาก ${this.pager.totalItems} รายการ`;
   }
 
+
   onDelete(id: number) {
-    if (!confirm('ยืนยันลบสินค้านี้หรือไม่?')) {
-      return;
-    }
-    this.productService.deleteProduct(id).subscribe({
-      next: () => {
-        // กรองเอาเฉพาะสินค้าที่ไม่ใช่ id ที่ลบแล้ว
-        this.products = this.products.filter(p => p.id !== id);
+    Swal.fire({
+      title: 'คุณแน่ใจหรือไม่?',
+      text: 'คุณต้องการลบสินค้านี้ใช่หรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'ลบเลย',
+      cancelButtonText: 'ยกเลิก',
+      customClass: {
+        confirmButton: 'swal2-confirm-btn',
+        cancelButton: 'swal2-cancel-btn'
       },
-      error: err => console.error('ลบสินค้าไม่สำเร็จ', err)
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProduct(id).subscribe({
+          next: () => {
+            this.products = this.products.filter(p => p.id !== id);
+            Swal.fire('ลบแล้ว!', 'สินค้าถูกลบเรียบร้อยแล้ว', 'success');
+          },
+          error: err => {
+            console.error('ลบสินค้าไม่สำเร็จ', err);
+            Swal.fire('ผิดพลาด', 'ลบสินค้าไม่สำเร็จ', 'error');
+          }
+        });
+      }
     });
   }
+
 
 }
