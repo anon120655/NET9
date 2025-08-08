@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Moq;
-using NET9.Application.DTOs;
+using NET9.Application.DTOs.Products;
 using NET9.Application.Interfaces;
 using NET9.Application.Services;
 using NET9.Domain.Entities;
